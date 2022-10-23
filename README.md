@@ -15,6 +15,7 @@ Para isso, é colocado em cada elemento do repositório um `dep-man-object` cont
 
 - dependências diretas (lista de diretórios baseados na raiz do repo, ou arquivos)
 - valor a ser colocado na variável de ambiente (precisa receber match de `[A-Za-z0-9_]+$`)
+- nome do projeto (a priori, idêntico ao do diretório, mas pode ser sobrescrito)
 
 ## Exemplo de uso no gitlab-ci
 
@@ -22,10 +23,46 @@ Seja o projeto:
 
 ```
 project/
-├── a
+├── eron-project
 │   └── .gitlab-ci.yml
-└── b
-    └── .gitlab-ci.yml
+└── minsk-project
+│   └── .gitlab-ci.yml
+└── .gitlab-ci.yml
 ```
 
+Para se fazer o build do projeto `eron-project`, de maneira única, podemos
+adicionar uma regra para isso:
+
+```yaml
+build-eron-project:
+  script:
+    - cd eron-project
+    - echo 'hello world'
+  rules:
+    - if: $WHO_TO_BUILD =~ ".*,eron-project,.*" && $CI_COMMIT_TAG
+```
+
+E para gerar o `minsk-project`, de maneira semelhante, poderia fazer:
+
+```yaml
+build-minsk-project:
+  script:
+    - cd minsk-project
+    - echo 'hello world'
+  rules:
+    - if: $WHO_TO_BUILD =~ ".*,minsk-project,.*" && $CI_COMMIT_TAG
+```
+
+A variável a ser empurrada é `WHO_TO_BUILD`, e cada elemento de build é
+identificado por um nome único.
+
 # Linguagem de dependência
+
+Vide o objeto `DepManRegistry`:
+
+```rb
+DepManRegistry.register do |myNewDepManObj|
+    myNewDepManObj.deps = [ 'minsk-project' ]
+    myNewDepManObj.name = 'eron-project'
+end
+```

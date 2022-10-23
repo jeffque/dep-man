@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    dep-man (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    mercenary (0.4.0)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  dep-man!
+  mercenary
+
+BUNDLED WITH
+   2.2.25

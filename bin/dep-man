@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'dep-man'
+require 'mercenary'
+
+Mercenary.program("dep-man") do |p|
+    p.description "Dep man depois preencho"
+    p.version DepMan::VERSION
+    p.syntax "dep-man <directory>"
+
+    p.action do |args, options|
+        puts "imprimindo os args: #{args}"
+        puts "imprimindo os args: #{options}"
+
+        # first arg is the directory
+        dir = args[0]
+        DepMan.searchDir dir
+        DepMan.list_deps
+    end
+end
